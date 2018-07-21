@@ -173,7 +173,9 @@ func (k *k8sSchedOps) ValidateVolumeSetup(vol *volume.Volume) error {
 	}
 
 	for _, p := range pods {
+		logrus.Infof("RK=> Checking Pod: %s", p.Name)
 		if ready := k8s.Instance().IsPodReady(p); !ready {
+			logrus.Infof("RK=> Pod not ready : %s", p.Name)
 			continue
 		}
 

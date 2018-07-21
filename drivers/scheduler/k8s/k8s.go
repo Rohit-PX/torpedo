@@ -945,6 +945,7 @@ func (k *k8s) GetVolumes(ctx *scheduler.Context) ([]*volume.Volume, error) {
 	var vols []*volume.Volume
 	for _, spec := range ctx.App.SpecList {
 		if obj, ok := spec.(*v1.PersistentVolumeClaim); ok {
+			logrus.Infof("RK=> PVC found: %s", string(obj.UID))
 			vol := &volume.Volume{
 				ID:        string(obj.UID),
 				Name:      obj.Name,
@@ -952,6 +953,7 @@ func (k *k8s) GetVolumes(ctx *scheduler.Context) ([]*volume.Volume, error) {
 			}
 			vols = append(vols, vol)
 		} else if obj, ok := spec.(*apps_api.StatefulSet); ok {
+			logrus.Infof("RK=> Stateful Set found: %s", string(obj.UID))
 			ss, err := k8sOps.GetStatefulSet(obj.Name, obj.Namespace)
 			if err != nil {
 				return nil, &scheduler.ErrFailedToGetStorage{
@@ -1136,8 +1138,8 @@ func (k *k8s) Describe(ctx *scheduler.Context) (string, error) {
 func (k *k8s) ScaleApplication(ctx *scheduler.Context, scaleFactorMap map[string]int32) error {
 	k8sOps := k8s_ops.Instance()
 	for _, spec := range ctx.App.SpecList {
-		logrus.Infof("Scale all Deployments")
 		if obj, ok := spec.(*apps_api.Deployment); ok {
+			logrus.Infof("Scale all Deployments")
 			dep, err := k8sOps.GetDeployment(obj.Name, obj.Namespace)
 			if err != nil {
 				return err
