@@ -1287,8 +1287,8 @@ func (k *k8s) Describe(ctx *scheduler.Context) (string, error) {
 func (k *k8s) ScaleApplication(ctx *scheduler.Context, scaleFactorMap map[string]int32) error {
 	k8sOps := k8s_ops.Instance()
 	for _, spec := range ctx.App.SpecList {
-		logrus.Infof("Scale all Deployments")
 		if obj, ok := spec.(*apps_api.Deployment); ok {
+			logrus.Infof("Scale all Deployments")
 			dep, err := k8sOps.GetDeployment(obj.Name, obj.Namespace)
 			if err != nil {
 				return err
