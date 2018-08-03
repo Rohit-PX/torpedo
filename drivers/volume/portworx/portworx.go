@@ -45,7 +45,7 @@ const (
 	validateReplicationUpdateTimeout = 10 * time.Minute
 	validateClusterStartTimeout      = 2 * time.Minute
 	validateNodeStartTimeout         = 2 * time.Minute
-	validatePXStartTimeout           = 2 * time.Minute
+	validatePXStartTimeout           = 5 * time.Minute
 	validateNodeStopTimeout          = 2 * time.Minute
 	stopDriverTimeout                = 5 * time.Minute
 	crashDriverTimeout               = 2 * time.Minute
