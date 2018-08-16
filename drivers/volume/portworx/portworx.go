@@ -45,11 +45,11 @@ const (
 	validateReplicationUpdateTimeout = 10 * time.Minute
 	validateClusterStartTimeout      = 2 * time.Minute
 	validateNodeStartTimeout         = 2 * time.Minute
-	validatePXStartTimeout           = 5 * time.Minute
+	validatePXStartTimeout           = 10 * time.Minute
 	validateNodeStopTimeout          = 2 * time.Minute
 	stopDriverTimeout                = 5 * time.Minute
-	crashDriverTimeout               = 2 * time.Minute
-	startDriverTimeout               = 2 * time.Minute
+	crashDriverTimeout               = 4 * time.Minute
+	startDriverTimeout               = 4 * time.Minute
 	upgradeTimeout                   = 10 * time.Minute
 	upgradeRetryInterval             = 30 * time.Second
 	waitVolDriverToCrash             = 1 * time.Minute
@@ -512,7 +512,7 @@ func (d *portworx) StopDriver(nodes []node.Node, force bool) error {
 					TimeBeforeRetry: defaultRetryInterval,
 				}})
 			if err != nil {
-				logrus.Warnf("failed to run systemctl stopcmd  on node %s err: %v", n.Name, err)
+				logrus.Warnf("failed to run systemctl stop cmd  on node %s err: %v", n.Name, err)
 				return err
 			}
 		}

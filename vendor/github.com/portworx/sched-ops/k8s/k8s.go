@@ -1121,6 +1121,15 @@ func (k *k8sOps) ValidateDeployment(deployment *apps_api.Deployment) error {
 			}
 		}
 
+		logrus.Infof("RK=> Checking UpdatedReplicas.")
+		if requiredReplicas > dep.Status.UpdatedReplicas {
+			return "", true, &ErrAppNotReady{
+				ID: dep.Name,
+				Cause: fmt.Sprintf("Expected replicas: %v Updated replicas: %v Current pods overview:\n%s",
+					requiredReplicas, dep.Status.UpdatedReplicas, podsOverviewString),
+			}
+		}
+
 		// look for "requiredReplicas" number of pods in ready state
 		var notReadyPods []string
 		var readyCount int32
