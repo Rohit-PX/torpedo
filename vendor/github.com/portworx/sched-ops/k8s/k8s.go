@@ -1062,9 +1062,9 @@ func (k *k8sOps) ValidateDeployment(deployment *apps_api.Deployment) error {
 		}
 
 		requiredReplicas := *dep.Spec.Replicas
+		shared := false
 
 		if requiredReplicas != 1 {
-			shared := false
 			foundPVC := false
 			for _, vol := range dep.Spec.Template.Spec.Volumes {
 				if vol.PersistentVolumeClaim != nil {
@@ -1078,6 +1078,7 @@ func (k *k8sOps) ValidateDeployment(deployment *apps_api.Deployment) error {
 					}
 
 					if k.isPVCShared(claim) {
+						logrus.Infof("RK=> Volume %v: is shared.", vol)
 						shared = true
 						break
 					}
@@ -1085,6 +1086,7 @@ func (k *k8sOps) ValidateDeployment(deployment *apps_api.Deployment) error {
 			}
 
 			if foundPVC && !shared {
+				logrus.Infof("RK=> PVC and non-shared.")
 				requiredReplicas = 1
 			}
 		}
@@ -1103,6 +1105,9 @@ func (k *k8sOps) ValidateDeployment(deployment *apps_api.Deployment) error {
 				Cause: "Deployment has 0 pods",
 			}
 		}
+		logrus.Infof("RK=> Expected replicas: %v Available replicas: %v ", requiredReplicas, dep.Status.AvailableReplicas)
+		logrus.Infof("RK=> Expected replicas: %v Ready replicas: %v ", requiredReplicas, dep.Status.ReadyReplicas)
+		logrus.Infof("RK=> Expected replicas: %v Updated replicas: %v ", requiredReplicas, dep.Status.UpdatedReplicas)
 
 		podsOverviewString := k.generatePodsOverviewString(pods)
 		if requiredReplicas > dep.Status.AvailableReplicas {
@@ -1122,7 +1127,7 @@ func (k *k8sOps) ValidateDeployment(deployment *apps_api.Deployment) error {
 		}
 
 		logrus.Infof("RK=> Checking UpdatedReplicas.")
-		if requiredReplicas != dep.Status.UpdatedReplicas {
+		if requiredReplicas != dep.Status.UpdatedReplicas && shared {
 			return "", true, &ErrAppNotReady{
 				ID: dep.Name,
 				Cause: fmt.Sprintf("Expected replicas: %v Updated replicas: %v Current pods overview:\n%s",
