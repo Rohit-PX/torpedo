@@ -1126,8 +1126,8 @@ func (k *k8sOps) ValidateDeployment(deployment *apps_api.Deployment) error {
 			}
 		}
 
-		logrus.Infof("RK=> Checking UpdatedReplicas.")
 		if requiredReplicas != dep.Status.UpdatedReplicas && shared {
+			logrus.Infof("RK=> Checking UpdatedReplicas.")
 			return "", true, &ErrAppNotReady{
 				ID: dep.Name,
 				Cause: fmt.Sprintf("Expected replicas: %v Updated replicas: %v Current pods overview:\n%s",
