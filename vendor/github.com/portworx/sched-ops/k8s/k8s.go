@@ -47,7 +47,7 @@ const (
 	nodeUpdateTimeout             = 1 * time.Minute
 	nodeUpdateRetryInterval       = 2 * time.Second
 	deploymentReadyTimeout        = 10 * time.Minute
-	validatePodReadyTimeout       = 10 * time.Minute
+	validatePodReadyTimeout       = 15 * time.Minute
 	validatePodRetryInterval      = 10 * time.Second
 	validateStatefulSetPVCTimeout = 15 * time.Minute
 	validatePVCTimeout            = 5 * time.Minute
