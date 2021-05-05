@@ -29,6 +29,28 @@ var _ = BeforeSuite(func() {
 })
 
 // This test performs basic test of starting an application and destroying it (along with storage)
+var _ = Describe("{Demo}", func() {
+	var contexts []*scheduler.Context
+
+	It("has to demo torpedo test", func() {
+		contexts = make([]*scheduler.Context, 0)
+
+		contexts = ScheduleApplications(fmt.Sprintf("demo"))
+		ValidateApplications(contexts)
+
+		opts := make(map[string]bool)
+		opts[scheduler.OptionsWaitForResourceLeakCleanup] = true
+
+		for _, ctx := range contexts {
+			TearDownContext(ctx, opts)
+		}
+	})
+	JustAfterEach(func() {
+		AfterEachTest(contexts)
+	})
+})
+
+// This test performs basic test of starting an application and destroying it (along with storage)
 var _ = Describe("{SetupTeardown}", func() {
 	var contexts []*scheduler.Context
 
