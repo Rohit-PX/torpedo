@@ -184,6 +184,7 @@ type K8s struct {
 	VaultToken              string
 	PureVolumes             bool
 	helmValuesConfigMapName string
+	IPv6                    bool
 }
 
 // IsNodeReady  Check whether the cluster node is ready
@@ -221,6 +222,7 @@ func (k *K8s) Init(schedOpts scheduler.InitOptions) error {
 	k.VaultToken = schedOpts.VaultToken
 	k.eventsStorage = make(map[string][]scheduler.Event)
 	k.PureVolumes = schedOpts.PureVolumes
+	k.IPv6 = schedOpts.IPv6
 
 	nodes, err := k8sCore.GetNodes()
 	if err != nil {
@@ -648,7 +650,7 @@ func (k *K8s) getAddressesForNode(n corev1.Node) []string {
 	return addrs
 }
 
-// parseK8SNode Parse the kubernetes clsuter nodes
+// parseK8SNode Parse the kubernetes cluster nodes
 //
 func (k *K8s) parseK8SNode(n corev1.Node) node.Node {
 	var nodeType node.Type

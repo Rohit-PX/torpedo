@@ -279,3 +279,8 @@ func ParseIPAddressInPxctlResourceDownAlert(alertsOutput, resource string) (stri
 	}
 	return "", fmt.Errorf("failed to find resource down alerts")
 }
+
+// AddSquareBrackets to IP address
+func AddSquareBrackets(ipaddr string) string {
+	return fmt.Sprintf("[%s]", ipaddr)
+}

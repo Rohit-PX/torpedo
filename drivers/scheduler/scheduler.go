@@ -98,6 +98,8 @@ type InitOptions struct {
 	VaultToken string
 	// PureVolumes identifies if this setup is using Pure backend
 	PureVolumes bool
+	// IPv6 identifies if this setup is using IPv6
+	IPv6 bool
 }
 
 // ScheduleOptions are options that callers to pass to influence the apps that get schduled

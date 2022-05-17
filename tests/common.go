@@ -147,6 +147,7 @@ const (
 	jiraUserNameFlag  = "jira-username"
 	jiraTokenFlag     = "jira-token"
 	jiraAccountIDFlag = "jira-account-id"
+	ipv6Flag          = "ipv6"
 
 	// Async DR
 	pairFileName   = "cluster-pair.yaml"
@@ -282,6 +283,7 @@ func InitInstance() {
 		VaultToken:              Inst().VaultToken,
 		PureVolumes:             Inst().PureVolumes,
 		HelmValuesConfigMapName: Inst().HelmValuesConfigMap,
+		IPv6:                    Inst().IPv6,
 	})
 	expect(err).NotTo(haveOccurred())
 
@@ -3021,6 +3023,7 @@ type Torpedo struct {
 	AutopilotUpgradeImage               string
 	CsiGenericDriverConfigMap           string
 	HelmValuesConfigMap                 string
+	IPv6                                bool
 }
 
 // ParseFlags parses command line flags
@@ -3053,6 +3056,7 @@ func ParseFlags() {
 	var schedUpgradeHops string
 	var autopilotUpgradeImage string
 	var csiGenericDriverConfigMapName string
+	var ipv6 bool
 
 	flag.StringVar(&s, schedulerCliFlag, defaultScheduler, "Name of the scheduler to use")
 	flag.StringVar(&n, nodeDriverCliFlag, defaultNodeDriver, "Name of the node driver to use")
@@ -3098,6 +3102,7 @@ func ParseFlags() {
 	flag.StringVar(&jiraUserName, jiraUserNameFlag, "", "Username to be used for JIRA client")
 	flag.StringVar(&jiraToken, jiraTokenFlag, "", "API token for accessing the JIRA")
 	flag.StringVar(&jirautils.AccountID, jiraAccountIDFlag, "", "AccountID for issue assignment")
+	flag.BoolVar(&ipv6, ipv6Flag, false, "Flag to check if cluster is IPv6 enabled")
 	flag.Parse()
 
 	appList, err := splitCsv(appListCSV)
@@ -3173,6 +3178,7 @@ func ParseFlags() {
 				CsiGenericDriverConfigMap:           csiGenericDriverConfigMapName,
 				LicenseExpiryTimeoutHours:           licenseExpiryTimeoutHours,
 				MeteringIntervalMins:                meteringIntervalMins,
+				IPv6:                                ipv6,
 			}
 		})
 	}

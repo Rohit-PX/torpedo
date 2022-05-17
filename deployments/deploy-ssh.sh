@@ -155,6 +155,10 @@ if [ -z "$AWS_REGION" ]; then
     echo "Using default AWS_REGION of ${AWS_REGION}"
 fi
 
+if [ -z "${IS_IPV6}" ]; then
+    IS_IPV6=false
+fi
+
 for i in $@
 do
 case $i in
@@ -463,6 +467,7 @@ spec:
             "--jira-username=$JIRA_USERNAME",
             "--jira-token=$JIRA_TOKEN",
             "--jira-account-id=$JIRA_ACCOUNT_ID",
+            "--ipv6=$IS_IPV6",
             "$APP_DESTROY_TIMEOUT_ARG",
     ]
     tty: true
